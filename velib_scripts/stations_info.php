@@ -10,7 +10,7 @@ $start_time = microtime(true);
 
 
 // Appel à l'API Velib
-$api_call = file_get_contents("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=3496355ea83da762fa3cae313a27882b5b062bd7");
+$api_call = file_get_contents("https://api.jcdecaux.com/vls/v1/stations?contract=Paris&apiKey=XXXXXX");
 
 
 // Décodage JSON
