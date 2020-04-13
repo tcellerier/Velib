@@ -48,29 +48,6 @@ else {
 // On check si on doit mettre une valeur par défaut
 $default_value = 1;
 
-// Basé sur la fonction SQL dayofweek() qui retourne 1 à 7 du dimanche au samedi
-if (isset($_POST['day']))  {
-  $day = implode(", ", $_POST['day']);
-  $default_value = 0;
-}
-else {
-  $day = date('w') + 1;
-}
-if (isset($_POST['month'])) {
-  $month = implode(", ", $_POST['month']);
-  $default_value = 0;
-}
-else {
-  $month = date('n');
-}
-if (isset($_POST['year']))  {
-  $year = implode(", ", $_POST['year']);
-  $default_value = 0;
-}
-else {
-  $year = date('Y');
-}
-
 // Lecture des données lastweekdays
 if (isset($_POST['lastweekdays'])) {
   $lastweekdays = $_POST['lastweekdays'];
@@ -98,10 +75,35 @@ else {
 }
 
 
+// Basé sur la fonction SQL dayofweek() qui retourne 1 à 7 du dimanche au samedi
+if (isset($_POST['day']))  {
+  $day = implode(", ", $_POST['day']);
+  $default_value = 0;
+}
+else {
+  $day = date('w') + 1;
+}
+
+// Mois de selection
+if (isset($_POST['yearmonth'])) {
+  $yearmonth = $_POST['yearmonth'];
+  $yearmonth_sql = "\"".implode("\", \"", $_POST['yearmonth'])."\"";
+  $default_value = 0;
+}
+else if ($lastweekdays == 0 and $lastdays == 0) {
+  $yearmonth[0] = date('Y-n');
+  $yearmonth_sql = "\"".$yearmonth[0]."\"";
+}
+else {
+  $yearmonth = "";
+}
+
+
 // On définit la valeur par défaut
 if ($default_value == 1) {
   $lastdays = 5;
 }
+
 
 
 
@@ -181,45 +183,51 @@ for ($j = 0 ; $j < $rows ; ++$j)
 
           </td>
           <td>   
-          <select name='month[]' onChange="this.form.elements['lastweekdays'].value='0';this.form.elements['lastdays'].value='0';javascript:submit()" size='12' multiple='multiple'>
-            <option value='1'<?php if (!isset($_POST['month']) and date('n')==1 or $_POST['month'][0]==1 or $_POST['month'][1]==1 or $_POST['month'][2]==1 or $_POST['month'][3]==1 or $_POST['month'][4]==1 or $_POST['month'][5]==1 or $_POST['month'][6]==1 or $_POST['month'][7]==1 or $_POST['month'][8]==1 or $_POST['month'][9]==1 or $_POST['month'][10]==1 or $_POST['month'][11]==1) echo " selected"; ?>>Janvier</option>
-            <option value='2'<?php if (!isset($_POST['month']) and date('n')==2 or $_POST['month'][0]==2 or $_POST['month'][1]==2 or $_POST['month'][2]==2 or $_POST['month'][3]==2 or $_POST['month'][4]==2 or $_POST['month'][5]==2 or $_POST['month'][6]==2 or $_POST['month'][7]==2 or $_POST['month'][8]==2 or $_POST['month'][9]==2 or $_POST['month'][10]==2 or $_POST['month'][11]==2) echo " selected"; ?>>Février</option>
-            <option value='3'<?php if (!isset($_POST['month']) and date('n')==3 or $_POST['month'][0]==3 or $_POST['month'][1]==3 or $_POST['month'][2]==3 or $_POST['month'][3]==3 or $_POST['month'][4]==3 or $_POST['month'][5]==3 or $_POST['month'][6]==3 or $_POST['month'][7]==3 or $_POST['month'][8]==3 or $_POST['month'][9]==3 or $_POST['month'][10]==3 or $_POST['month'][11]==3) echo " selected"; ?>>Mars</option>
-            <option value='4'<?php if (!isset($_POST['month']) and date('n')==4 or $_POST['month'][0]==4 or $_POST['month'][1]==4 or $_POST['month'][2]==4 or $_POST['month'][3]==4 or $_POST['month'][4]==4 or $_POST['month'][5]==4 or $_POST['month'][6]==4 or $_POST['month'][7]==4 or $_POST['month'][8]==4 or $_POST['month'][9]==4 or $_POST['month'][10]==4 or $_POST['month'][11]==4) echo " selected"; ?>>Avril</option>
-            <option value='5'<?php if (!isset($_POST['month']) and date('n')==5 or $_POST['month'][0]==5 or $_POST['month'][1]==5 or $_POST['month'][2]==5 or $_POST['month'][3]==5 or $_POST['month'][4]==5 or $_POST['month'][5]==5 or $_POST['month'][6]==5 or $_POST['month'][7]==5 or $_POST['month'][8]==5 or $_POST['month'][9]==5 or $_POST['month'][10]==5 or $_POST['month'][11]==5) echo " selected"; ?>>Mai</option>
-            <option value='6'<?php if (!isset($_POST['month']) and date('n')==6 or $_POST['month'][0]==6 or $_POST['month'][1]==6 or $_POST['month'][2]==6 or $_POST['month'][3]==6 or $_POST['month'][4]==6 or $_POST['month'][5]==6 or $_POST['month'][6]==6 or $_POST['month'][7]==6 or $_POST['month'][8]==6 or $_POST['month'][9]==6 or $_POST['month'][10]==6 or $_POST['month'][11]==6) echo " selected"; ?>>Juin</option>
-            <option value='7'<?php if (!isset($_POST['month']) and date('n')==7 or $_POST['month'][0]==7 or $_POST['month'][1]==7 or $_POST['month'][2]==7 or $_POST['month'][3]==7 or $_POST['month'][4]==7 or $_POST['month'][5]==7 or $_POST['month'][6]==7 or $_POST['month'][7]==7 or $_POST['month'][8]==7 or $_POST['month'][9]==7 or $_POST['month'][10]==7 or $_POST['month'][11]==7) echo " selected"; ?>>Juillet</option>
-            <option value='8'<?php if (!isset($_POST['month']) and date('n')==8 or $_POST['month'][0]==8 or $_POST['month'][1]==8 or $_POST['month'][2]==8 or $_POST['month'][3]==8 or $_POST['month'][4]==8 or $_POST['month'][5]==8 or $_POST['month'][6]==8 or $_POST['month'][7]==8 or $_POST['month'][8]==8 or $_POST['month'][9]==8 or $_POST['month'][10]==8 or $_POST['month'][11]==8) echo " selected"; ?>>Août</option>
-            <option value='9'<?php if (!isset($_POST['month']) and date('n')==9 or $_POST['month'][0]==9 or $_POST['month'][1]==9 or $_POST['month'][2]==9 or $_POST['month'][3]==9 or $_POST['month'][4]==9 or $_POST['month'][5]==9 or $_POST['month'][6]==9 or $_POST['month'][7]==9 or $_POST['month'][8]==9 or $_POST['month'][9]==9 or $_POST['month'][10]==9 or $_POST['month'][11]==9) echo " selected"; ?>>Septembre</option>
-            <option value='10'<?php if (!isset($_POST['month']) and date('n')==10 or $_POST['month'][0]==10 or $_POST['month'][1]==10 or $_POST['month'][2]==10 or $_POST['month'][3]==10 or $_POST['month'][4]==10 or $_POST['month'][5]==10 or $_POST['month'][6]==10 or $_POST['month'][7]==10 or $_POST['month'][8]==10 or $_POST['month'][9]==10 or $_POST['month'][10]==10 or $_POST['month'][11]==10) echo " selected"; ?>>Octobre</option>
-            <option value='11'<?php if (!isset($_POST['month']) and date('n')==11 or $_POST['month'][0]==11 or $_POST['month'][1]==11 or $_POST['month'][2]==11 or $_POST['month'][3]==11 or $_POST['month'][4]==11 or $_POST['month'][5]==11 or $_POST['month'][6]==11 or $_POST['month'][7]==11 or $_POST['month'][8]==11 or $_POST['month'][9]==11 or $_POST['month'][10]==11 or $_POST['month'][11]==11) echo " selected"; ?>>Novembre</option>
-            <option value='12'<?php if (!isset($_POST['month']) and  date('n')==12 or $_POST['month'][0]==12 or $_POST['month'][1]==12 or $_POST['month'][2]==12 or $_POST['month'][3]==12 or $_POST['month'][4]==12 or $_POST['month'][5]==12 or $_POST['month'][6]==12 or $_POST['month'][7]==12 or $_POST['month'][8]==12 or $_POST['month'][9]==12 or $_POST['month'][10]==12 or $_POST['month'][11]==12) echo " selected"; ?>>Décembre</option>
-          </select>
-          </td>
-          <td>
-            <select name='year[]' onChange="this.form.elements['lastweekdays'].value='0';this.form.elements['lastdays'].value='0';javascript:submit()" size='2' multiple='multiple'>
-<?php 
+          <select name='yearmonth[]' id="yearmonth" onChange="this.form.elements['lastweekdays'].value='0';this.form.elements['lastdays'].value='0';javascript:submit()" size='6' multiple='multiple'>
+          <?php 
 
-$query = "SELECT distinct YEAR(last_update) as update_year from stations_usage where stationcode=\"".$stationcode."\"  order by 1 limit 5";
-$result = $conn->query($query);
-if (!$result) die($conn->error);
+          $query = "SELECT distinct concat(YEAR(last_update), '-', MONTH(last_update)) as update_yearmonth, YEAR(last_update) as update_year, MONTH(last_update) as update_month from stations_usage where stationcode=\"".$stationcode."\"  order by 2 desc, 3 desc limit 15";
+          $result = $conn->query($query);
+          if (!$result) die($conn->error);
 
-$rows = $result->num_rows;
-for ($j = 0 ; $j < $rows ; ++$j)
-{
-  $result->data_seek($j);
-  $row = $result->fetch_array(MYSQLI_ASSOC);
+          $rows = $result->num_rows;
+          for ($j = 0 ; $j < $rows ; ++$j)
+          {
+            $result->data_seek($j);
+            $row = $result->fetch_array(MYSQLI_ASSOC);
 
-  echo "\t\t\t<option value=" . $row['update_year'];
-  if (!isset($_POST['year']) and date('Y')==$row['update_year'] or $_POST['year'][0]==$row['update_year'] or $_POST['year'][1]==$row['update_year'] or $_POST['year'][2]==$row['update_year'] or  $_POST['year'][3]==$row['update_year']) echo " selected";
-  echo ">". $row['update_year']."</option>\r\n";
-} 
+            $yearmonth_is_selected = 0;
+            foreach ($yearmonth as $yearmonth_key => $yearmonth_value) {
+ 
+              if ($yearmonth_value == $row['update_yearmonth']) {
+                $yearmonth_is_selected = 1;
+              }
+            }
+
+            if ($row['update_month'] == 1) $month_display = "Janvier";
+            else if ($row['update_month'] == 2) $month_display = "Février";
+            else if ($row['update_month'] == 3) $month_display = "Mars";
+            else if ($row['update_month'] == 4) $month_display = "Avril";
+            else if ($row['update_month'] == 5) $month_display = "Mail";
+            else if ($row['update_month'] == 6) $month_display = "Juin";
+            else if ($row['update_month'] == 7) $month_display = "Juillet";
+            else if ($row['update_month'] == 8) $month_display = "Août";
+            else if ($row['update_month'] == 9) $month_display = "Septembre";
+            else if ($row['update_month'] == 10) $month_display = "Octobre";
+            else if ($row['update_month'] == 11) $month_display = "Novembre";
+            else if ($row['update_month'] == 12) $month_display = "Décembre";
+
+            echo "\t\t\t<option value=" . $row['update_yearmonth'];
+            if ($yearmonth_is_selected == 1) echo " selected";
+            echo ">".$month_display." ". $row['update_year']."</option>\r\n";
+          } 
          ?>
-         </select>
+
+          </select>
           </td>
           <td style="text-align:left">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ou&nbsp;&nbsp;&nbsp;&nbsp;
-      <select name='lastdays' onChange="this.form.elements['lastweekdays'].value='0';javascript:submit()" size='1'>
+      <select name='lastdays' onChange="this.form.elements['lastweekdays'].value='0';document.getElementById('yearmonth').options.selectedIndex = -1;javascript:submit()" size='1'>
         <option value='0'<?php if ($lastdays==0) echo " selected"; ?>></option>
         <option value='1'<?php if ($lastdays==1) echo " selected"; ?>>1</option>
         <option value='2'<?php if ($lastdays==2) echo " selected"; ?>>2</option>
@@ -240,7 +248,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
             </select> derniers jours
             <br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ou&nbsp;&nbsp;&nbsp;&nbsp;
-      <select name='lastweekdays' onChange="this.form.elements['lastdays'].value='0';javascript:submit()" size='1'>
+      <select name='lastweekdays' onChange="this.form.elements['lastdays'].value='0';document.getElementById('yearmonth').options.selectedIndex = -1;javascript:submit()" size='1'>
         <option value='0'<?php if ($lastweekdays==0) echo " selected"; ?>></option>
         <option value='1'<?php if ($lastweekdays==1) echo " selected"; ?>>1</option>
         <option value='2'<?php if ($lastweekdays==2) echo " selected"; ?>>2</option>
@@ -277,6 +285,7 @@ for ($j = 0 ; $j < $rows ; ++$j)
 
 
 <?php
+
 // mode sélection par 'n' derniers jours
 if ($lastdays > 0)
   $query = "SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, MINUTE(last_update) as update_minute, ".$type_field." as bikes from stations_usage where stationcode=\"".$stationcode."\" and date(last_update) between CURRENT_DATE - INTERVAL ".$lastdays." DAY and CURRENT_DATE - INTERVAL 1 DAY ORDER BY 1 DESC, 2, 3";
@@ -285,8 +294,9 @@ else if ($lastweekdays > 0)
   $query = "SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, MINUTE(last_update) as update_minute, ".$type_field." as bikes from stations_usage where stationcode=\"".$stationcode."\" and date(last_update) between CURRENT_DATE - INTERVAL ".$lastweekdays." WEEK and CURRENT_DATE - INTERVAL 1 DAY and DAYOFWEEK(last_update) = DAYOFWEEK(CURRENT_DATE) ORDER BY 1 DESC, 2, 3";
 // Série des jours dans le mode sélection par jour/mois/année
 else
-  $query = "SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, MINUTE(last_update) as update_minute, ".$type_field." as bikes from stations_usage where stationcode=\"".$stationcode."\" and DAYOFWEEK(last_update) in (".$day.") and MONTH(last_update) in (".$month.") and YEAR(last_update) in (".$year.") ORDER BY 1 DESC, 2, 3";
-  
+  $query = "SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, MINUTE(last_update) as update_minute, ".$type_field." as bikes from stations_usage where stationcode=\"".$stationcode."\" and DAYOFWEEK(last_update) in (".$day.") and CONCAT(YEAR(last_update), '-', MONTH(last_update)) in (".$yearmonth_sql.") ORDER BY 1 DESC, 2, 3";
+ 
+
 
 $result = $conn->query($query);
 if (!$result) die($conn->error);
@@ -307,7 +317,7 @@ if ($lastweekdays > 0 OR $lastdays > 0)
   $query = "SELECT update_hour, update_minute, ROUND(AVG(bikes),1) as bikes from (SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, FLOOR(MINUTE(last_update) / 15) * 15 as update_minute, AVG(".$type_field.") as bikes from stations_usage where stationcode=\"".$stationcode."\" and date(last_update) = CURRENT_DATE GROUP BY 1,2,3) MAIN group by 1,2 ORDER BY 1,2";
 // Série des moyennes dans le mode sélection par jour/mois/année
 else
-  $query = "SELECT update_hour, update_minute, ROUND(AVG(bikes),1) as bikes from (SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, FLOOR(MINUTE(last_update) / 15) * 15 as update_minute, AVG(".$type_field.") as bikes from stations_usage where stationcode=\"".$stationcode."\" and DAYOFWEEK(last_update) in (".$day.") and MONTH(last_update) in (".$month.") and YEAR(last_update) in (".$year.") GROUP BY 1,2,3) MAIN group by 1,2 ORDER BY 1,2";
+  $query = "SELECT update_hour, update_minute, ROUND(AVG(bikes),1) as bikes from (SELECT DATE(last_update) as update_date, HOUR(last_update) as update_hour, FLOOR(MINUTE(last_update) / 15) * 15 as update_minute, AVG(".$type_field.") as bikes from stations_usage where stationcode=\"".$stationcode."\" and DAYOFWEEK(last_update) in (".$day.") and CONCAT(YEAR(last_update), '-', MONTH(last_update)) in (".$yearmonth_sql.") GROUP BY 1,2,3) MAIN group by 1,2 ORDER BY 1,2";
 
 
 $result = $conn->query($query);
