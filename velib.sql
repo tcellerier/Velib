@@ -1,9 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb4
+-- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
--- Generation Time: Feb 10, 2018 at 03:32 PM
--- Server version: 10.1.23-MariaDB-9+deb9u1
--- PHP Version: 7.0.27-0+deb9u1
+--
+-- Host: localhost:3306
+-- Generation Time: Apr 13, 2020 at 03:18 PM
+-- Server version: 10.3.22-MariaDB-0+deb10u1
+-- PHP Version: 7.0.33-0+deb9u7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `velib`
 --
-CREATE DATABASE IF NOT EXISTS `velib` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `velib`;
 
 -- --------------------------------------------------------
 
@@ -27,14 +27,15 @@ USE `velib`;
 --
 
 CREATE TABLE `stations_info` (
-  `code` varchar(6) NOT NULL,
-  `gps_lat` double NOT NULL,
-  `gps_lng` double NOT NULL,
-  `state` varchar(30) NOT NULL,
-  `name` varchar(250) NOT NULL,
-  `address` varchar(250) NOT NULL,
-  `nbDock` tinyint(3) UNSIGNED NOT NULL,
-  `nbEDock` tinyint(3) UNSIGNED NOT NULL
+  `stationcode` varchar(6) NOT NULL,
+  `name` varchar(250) DEFAULT NULL,
+  `capacity` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `gps_lat` double DEFAULT NULL,
+  `gps_lng` double DEFAULT NULL,
+  `is_installed` tinyint(1) DEFAULT NULL,
+  `is_returning` tinyint(1) DEFAULT NULL,
+  `is_renting` tinyint(1) DEFAULT NULL,
+  `last_reported` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -44,11 +45,11 @@ CREATE TABLE `stations_info` (
 --
 
 CREATE TABLE `stations_usage` (
-  `code` varchar(6) NOT NULL,
+  `stationcode` varchar(6) NOT NULL,
   `last_update` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `nbBike` tinyint(3) UNSIGNED NOT NULL,
-  `nbEbike` tinyint(3) UNSIGNED NOT NULL,
-  `nbFreeDock` tinyint(3) UNSIGNED NOT NULL
+  `num_bikes_mechanical` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `num_bikes_ebike` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `num_docks_available` tinyint(3) UNSIGNED NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -59,13 +60,13 @@ CREATE TABLE `stations_usage` (
 -- Indexes for table `stations_info`
 --
 ALTER TABLE `stations_info`
-  ADD PRIMARY KEY (`code`);
+  ADD PRIMARY KEY (`stationcode`);
 
 --
 -- Indexes for table `stations_usage`
 --
 ALTER TABLE `stations_usage`
-  ADD PRIMARY KEY (`code`,`last_update`);
+  ADD PRIMARY KEY (`stationcode`,`last_update`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
